@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void charToIntegerArray(char* carray, int* &iarray, int &a);
+void charToIntegerArray(char* carray, int* &iarray, int &size);
 
 int pow(int a, int b);
 
@@ -15,6 +15,8 @@ void heapify(int* &arr, int size, int index);
 void buildHeap(int* &arr, int size);
 
 void swap (int &a, int &b);
+
+void heapVisual(int* arr, int size);
 
 int main(){
   char* keyword = new char[10];
@@ -49,39 +51,26 @@ int main(){
   int* numberInput = new int[101];
   int size = 0;
   charToIntegerArray(input, numberInput, size);
-  cout << "Integer Array:" << endl;
+  /*cout << "Integer Array:" << endl;
   for (int i = 0; i < (size); i++){
     cout << numberInput[i] << ",";
   }
+  cout << endl;*/
   cout << endl;
-  cout << "Building Heap:" << endl;
+  cout << "Building Heap..." << endl;
   buildHeap(numberInput, size);
+  cout << "Finished Build." << endl << endl;
   cout << "Output:" << endl;
   for (int i = 0; i < size; i++){
     cout << numberInput[i] << ",";
   }
+  cout << endl << endl;
   cout << "Heap Visualizer: " << endl;
-  int subtract = 1;
-  for (int i = 0; i < size; i++){
-    cout << endl;
-    cout << "Node: " << numberInput[i] << endl;
-    if (i != 0){
-      if (i%2 ==0){
-	subtract++;
-      }
-      cout << "Parent: " << numberInput[i-subtract] << endl;
-    }
-    if (numberInput[2*i+1] != 0){
-      cout << "Left Child: " << numberInput[2*i+1] << endl;
-    }
-    if (numberInput[2*i+2] != 0){
-      cout << "Right Child: " << numberInput[2*i+2] << endl;
-    }
-  }
+  heapVisual(numberInput, size);
   return 0;
 }
 
-void charToIntegerArray(char* carray, int* &iarray, int &a){
+void charToIntegerArray(char* carray, int* &iarray, int &size){
   int counter = 0;
   int place = 0;
   for (int i = 0; i < strlen(carray); i++){
@@ -94,11 +83,11 @@ void charToIntegerArray(char* carray, int* &iarray, int &a){
 	counter = (counter * pow(10, place-1)) + (carray[i] - '0');
       }
       if (i == strlen(carray)-1){
-	iarray[a++] = counter;
+	iarray[size++] = counter;
       }
     }
     else if (carray[i] == ' '){
-      iarray[a++] = counter;
+      iarray[size++] = counter;
       counter = 0;
       place = 0;
     }
@@ -141,4 +130,24 @@ void swap (int &a, int &b){//swaps a and b
   int temp = a;
   a = b;
   b = temp;
+}
+
+void heapVisual(int* arr, int size){
+  int subtract = 1;
+  for (int i = 0; i < size; i++){
+    cout << endl;
+    cout << "Node: " << arr[i] << endl;
+    if (i != 0){
+      if (i%2 ==0){
+        subtract++;
+      }
+      cout << "Parent: " << arr[i-subtract] << endl;
+    }
+    if (arr[2*i+1] != 0){
+      cout << "Left Child: " << arr[2*i+1] << endl;
+    }
+    if (arr[2*i+2] != 0){
+      cout << "Right Child: " << arr[2*i+2] << endl;
+    }
+  }
 }
