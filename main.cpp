@@ -14,16 +14,16 @@ void heapify(int* &arr, int size, int index);
 
 void buildHeap(int* &arr, int size);
 
-void printHeap(int* &arr, int size);
+void swap (int &a, int &b);
 
 int main(){
   char* keyword = new char[10];
   char* input = new char[200];
   bool loop = true;
   while (loop == true){
-    cout << "Type MANUAL for console input, and FILE to read in a file." << endl;
+    cout << "Type CONSOLE for console input, and FILE to read in a file." << endl;
     cin.getline(keyword, 10, '\n');
-    if (strcmp(keyword, "MANUAL") == 0){
+    if (strcmp(keyword, "CONSOLE") == 0){
       cin.getline(input, 200, '\n');
       loop = false;
     }
@@ -49,11 +49,35 @@ int main(){
   int* numberInput = new int[101];
   int size = 0;
   charToIntegerArray(input, numberInput, size);
-  /*for (int i = 0; i < (size); i++){
+  cout << "Integer Array:" << endl;
+  for (int i = 0; i < (size); i++){
     cout << numberInput[i] << ",";
-    }*/
+  }
+  cout << endl;
+  cout << "Building Heap:" << endl;
   buildHeap(numberInput, size);
-  printHeap(numberInput, size);
+  cout << "Output:" << endl;
+  for (int i = 0; i < size; i++){
+    cout << numberInput[i] << ",";
+  }
+  cout << "Heap Visualizer: " << endl;
+  int subtract = 1;
+  for (int i = 0; i < size; i++){
+    cout << endl;
+    cout << "Node: " << numberInput[i] << endl;
+    if (i != 0){
+      if (i%2 ==0){
+	subtract++;
+      }
+      cout << "Parent: " << numberInput[i-subtract] << endl;
+    }
+    if (numberInput[2*i+1] != 0){
+      cout << "Left Child: " << numberInput[2*i+1] << endl;
+    }
+    if (numberInput[2*i+2] != 0){
+      cout << "Right Child: " << numberInput[2*i+2] << endl;
+    }
+  }
   return 0;
 }
 
@@ -89,34 +113,32 @@ int pow(int a, int b){
   return x;
 }
 
-void heapify(int* &arr, int size, int index){
-  int largest = index;
+void heapify(int* &arr, int size, int index){//check to see if parents are greater than their children. If not, swap them.
+  int largest = index; //Would want to make root the largest
   int leftChild = 2 * index + 1;
   int rightChild = 2 * index + 2;
 
-  if (leftChild < size && arr[largest] < arr[leftChild]){
+  if (leftChild < size && arr[largest] < arr[leftChild]){//if root is smaller than it's left child
     largest = leftChild;
   }
-  if (rightChild < size && arr[largest] < arr[rightChild]){
+  if (rightChild < size && arr[largest] < arr[rightChild]){//same for right child
     largest = rightChild;
   }
-  if (largest != index){
-    swap(arr[index], arr[largest]);
-    heapify (arr, size, largest);
+  if (largest != index){//if the root was changed
+    swap(arr[index], arr[largest]);//swap the value of the root with the current value
+    heapify (arr, size, largest); //go through every parent-child relationship
   }
 }
 
-void buildHeap(int* &arr, int size){
-  int startIndex = (size/2)-1;
-  for (int i = startIndex; i >= 0; i--){
-    heapify(arr, size, i);
+void buildHeap(int* &arr, int size){ //build max heap, passing in the integerArray
+  int startIndex = (size/2)-1;//index of last node with children
+  for (int i = startIndex; i >= 0; i--){//starting from the last node with children, heapify in reverse
+    heapify(arr, size, i);//check to see if values are in correct place
   }
 }
 
-void printHeap(int* &arr, int size){
-  cout << "Array representation of Heap:\n";
-  for (int i = 0; i < size; i++){
-    cout << arr[i] << " ";
-    cout << '\n';
-  }
+void swap (int &a, int &b){//swaps a and b
+  int temp = a;
+  a = b;
+  b = temp;
 }
