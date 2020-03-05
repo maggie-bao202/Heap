@@ -7,7 +7,14 @@
 using namespace std;
 
 void charToIntegerArray(char* carray, int* &iarray, int &a);
+
 int pow(int a, int b);
+
+void heapify(int* &arr, int size, int index);
+
+void buildHeap(int* &arr, int size);
+
+void printHeap(int* &arr, int size);
 
 int main(){
   char* keyword = new char[10];
@@ -42,10 +49,11 @@ int main(){
   int* numberInput = new int[101];
   int size = 0;
   charToIntegerArray(input, numberInput, size);
-  for (int i = 0; i < (size); i++){
+  /*for (int i = 0; i < (size); i++){
     cout << numberInput[i] << ",";
-  }
-  
+    }*/
+  buildHeap(numberInput, size);
+  printHeap(numberInput, size);
   return 0;
 }
 
@@ -79,4 +87,36 @@ int pow(int a, int b){
     x *= a;
   }
   return x;
+}
+
+void heapify(int* &arr, int size, int index){
+  int largest = index;
+  int leftChild = 2 * index + 1;
+  int rightChild = 2 * index + 2;
+
+  if (leftChild < size && arr[largest] < arr[leftChild]){
+    largest = leftChild;
+  }
+  if (rightChild < size && arr[largest] < arr[rightChild]){
+    largest = rightChild;
+  }
+  if (largest != index){
+    swap(arr[index], arr[largest]);
+    heapify (arr, size, largest);
+  }
+}
+
+void buildHeap(int* &arr, int size){
+  int startIndex = (size/2)-1;
+  for (int i = startIndex; i >= 0; i--){
+    heapify(arr, size, i);
+  }
+}
+
+void printHeap(int* &arr, int size){
+  cout << "Array representation of Heap:\n";
+  for (int i = 0; i < size; i++){
+    cout << arr[i] << " ";
+    cout << '\n';
+  }
 }
