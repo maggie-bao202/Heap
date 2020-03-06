@@ -10,8 +10,8 @@ int pow(int a, int b);
 void heapify(int* &arr, int size, int index);
 void buildHeap(int* &arr, int size);
 void swap (int &a, int &b);
-void heapVisual(int* arr, int size);
-
+void heapVisual(int* arr, int size, int, int);
+void sortByRemovingRoot(int* &arr, int &size);
 int main(){
   char* keyword = new char[10];
   char* input = new char[200];
@@ -51,16 +51,17 @@ int main(){
   }
   cout << endl;*/
   cout << endl;
-  cout << "Building Heap..." << endl;
   buildHeap(numberInput, size);//numberInput is now the heap/tree
-  cout << "Finished Build." << endl << endl;
-  cout << "Output:" << endl;
-  for (int i = 0; i < size; i++){//print out numberInput/heap
+  cout << "Heap: " << endl;
+  for (int i = 0; i < size; i++){
     cout << numberInput[i] << ",";
   }
   cout << endl << endl;
-  cout << "Heap Visualizer: " << endl;
-  heapVisual(numberInput, size);//print information about elements of output
+  cout << "Heap Tree:" << endl << endl;
+  heapVisual(numberInput, size, 0, 0);//print information about elements of output
+  cout << endl << endl;
+  cout << "Heap Sort: " << endl;
+  sortByRemovingRoot(numberInput, size);
   delete[] numberInput;
   delete[] input;
   return 0;
@@ -129,7 +130,7 @@ void swap (int &a, int &b){//swaps a and b
   b = temp;
 }
 
-void heapVisual(int* arr, int size){//Goes through each element, and prints out parent/children information 
+/*void heapVisual(int* arr, int size){//Goes through each element, and prints out parent/children information 
   int subtract = 1;
   for (int i = 0; i < size; i++){
     cout << endl;
@@ -150,5 +151,41 @@ void heapVisual(int* arr, int size){//Goes through each element, and prints out 
 	cout << "Right Child: " << arr[2*i+2] << endl;
       }
     }
+  }
+}
+*/
+/*
+void heapVisual(int* arr, int size){
+  int place = 0;
+  int counter = 1;
+  for (int i = 0; i < size; i++){
+    cout << arr[i] << "\t";
+    if (i+1 == counter){
+      cout << endl;
+      place++;
+      counter += pow(2, place);
+    }
+  }
+}
+*/
+void heapVisual(int* arr, int size, int depth, int ind) {
+  if (size >= ind*2+2){
+    heapVisual(arr, size, depth+1, ind*2+2);
+  }
+  for (int i = 0; i < depth; i++){
+    cout << "\t";
+  }
+  cout << arr[ind] << endl;
+  if (size >= ind*2+1) {
+    heapVisual(arr, size, depth+1, ind*2+1);
+  }
+}
+
+void sortByRemovingRoot(int* &arr, int &size){
+  for (int i = 0; i < size; size--){
+    cout << arr[0] << ",";
+    arr[0] = arr[size-1];
+    //delete[]size-1;
+    heapify(arr, size, 0);
   }
 }
