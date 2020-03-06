@@ -61,11 +61,8 @@ int main(){
   cout << endl << endl;
   cout << "Heap Visualizer: " << endl;
   heapVisual(numberInput, size);//print information about elements of output
-  rootRemove(numberInput, size);
-  cout << endl;
-  for (int i = 0; i < size; i++){
-    cout << numberInput[i] << ",";
-  }
+  delete[] numberInput;
+  delete[] input;
   return 0;
 }
 
