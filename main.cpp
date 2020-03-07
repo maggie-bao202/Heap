@@ -5,13 +5,13 @@
 
 using namespace std;
 /*Author: Maggie Bao. Description: After taking in either file input or console input, the program converts the char* array into an int* array, then modifies it into a heap. The program then prints out the output.*/
+
 void charToIntegerArray(char* carray, int* &iarray, int &size);
 int pow(int a, int b);
 void heapify(int* &arr, int size, int index);
-void buildHeap(int* &arr, int size);
-void swap (int &a, int &b);
 void heapVisual(int* arr, int size, int, int);
 void sortByRemovingRoot(int* &arr, int &size);
+
 int main(){
   char* keyword = new char[10];
   char* input = new char[200];
@@ -51,7 +51,9 @@ int main(){
   }
   cout << endl;*/
   cout << endl;
-  buildHeap(numberInput, size);//numberInput is now the heap/tree
+  for (int i = (size/2)-1; i >= 0; i--){//starting from the last node with children, heapify in reverse
+    heapify(numberInput, size, i);//check to see if values are in correct place
+  }
   cout << "Heap: " << endl;
   for (int i = 0; i < size; i++){
     cout << numberInput[i] << ",";
@@ -62,6 +64,9 @@ int main(){
   cout << endl << endl;
   cout << "Heap Sort: " << endl;
   sortByRemovingRoot(numberInput, size);
+  for (int i = 0; i < size; i++){
+    cout << numberInput[i] << " ";
+  }
   delete[] numberInput;
   delete[] input;
   return 0;
@@ -102,32 +107,21 @@ int pow(int a, int b){//pow(10, 4) = 10^4, power function
 //https://www.geeksforgeeks.org/building-heap-from-array/, harsh agarwal
 void heapify(int* &arr, int size, int index){//check to see if parents are greater than their children. If not, swap them.
   int largest = index; //Would want to make root the largest
-  int leftChild = 2 * index + 1;
-  int rightChild = 2 * index + 2;
+  int leftChild = 2*index+1;
+  int rightChild = 2*index+2;
 
-  if (leftChild < size && arr[largest] < arr[leftChild]){//if root is smaller than it's left child
-    largest = leftChild;//set the root index to be the index of child
+  if (leftChild < size && arr[largest] < arr[leftChild]){//if left child exists within the tree and if root is smaller than it's left child
+    largest = leftChild;//go to child index
   }
   if (rightChild < size && arr[largest] < arr[rightChild]){//check for right child after left
     largest = rightChild;
   }
   if (largest != index){//if the root was changed
-    swap(arr[index], arr[largest]);//swap the value of the root with the current value
+    int temp = arr[largest];
+    arr[largest] = arr[index];
+    arr[index] = temp;
     heapify (arr, size, largest); //go through every parent-child relationship
   }
-}
-
-void buildHeap(int* &arr, int size){ //build max heap, passing in the integerArray
-  int startIndex = (size/2)-1;//index of last node with children
-  for (int i = startIndex; i >= 0; i--){//starting from the last node with children, heapify in reverse
-    heapify(arr, size, i);//check to see if values are in correct place
-  }
-}
-
-void swap (int &a, int &b){//swaps a and b
-  int temp = a;
-  a = b;
-  b = temp;
 }
 
 /*void heapVisual(int* arr, int size){//Goes through each element, and prints out parent/children information 
@@ -185,7 +179,7 @@ void sortByRemovingRoot(int* &arr, int &size){
   for (int i = 0; i < size; size--){
     cout << arr[0] << ",";
     arr[0] = arr[size-1];
-    //delete[]size-1;
     heapify(arr, size, 0);
+    arr[size-1] = 0;
   }
 }
