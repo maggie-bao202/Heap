@@ -8,7 +8,7 @@ using namespace std;
 
 void charToIntegerArray(char* carray, int* &iarray, int &size);
 int pow(int a, int b);
-void heapify(int* &arr, int size, int index);
+void heapify(int* arr, int size, int index);
 void heapVisual(int* arr, int size, int, int);
 void sortByRemovingRoot(int* &arr, int &size);
 
@@ -102,7 +102,7 @@ int pow(int a, int b){//pow(10, 4) = 10^4, power function
 }
 
 //https://www.geeksforgeeks.org/building-heap-from-array/, harsh agarwal
-void heapify(int* &arr, int size, int index){//check to see if parents are greater than their children. If not, swap them. Go down the tree
+void heapify(int* arr, int size, int index){//check to see if parents are greater than their children. If not, swap them. Go down the tree
   int temp = index; //Would want to make root the largest
   if (index*2+1 < size && arr[temp] < arr[index*2+1]){//if left child exists within the tree and if root is smaller than it's left child
     temp = index*2+1;//go to left child index
@@ -117,6 +117,25 @@ void heapify(int* &arr, int size, int index){//check to see if parents are great
     heapify (arr, size, temp); //go through every parent-child relationship
   }
 }
+
+/*void heapify(int* arr, int size, int index){
+  int left = 2*index;
+  int temp = arr[index];
+  while (left <= size){
+    if (left < size && arr[left+1] > arr[left]){
+      left = left+1;
+    }
+    if (temp > arr[left]){
+      break;
+    }
+    else if (temp <= arr[left]){
+      arr[left/2] = arr[left];
+      left = 2*left;
+    }
+  }
+  arr[left/2] = temp;
+  return;
+}*/
 
 /*void heapVisual(int* arr, int size){//Goes through each element, and prints out parent/children information 
   int subtract = 1;
