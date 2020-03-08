@@ -23,9 +23,9 @@ int main(){
       cin.getline(input, 200, '\n');
       loop = false;//continue
     }
-    else if (strcmp(keyword, "FILE") == 0){//if entered FILE, (With help from Peter Jin and his code)
-      cout << "Enter file name: " << endl;
+    else if (strcmp(keyword, "FILE") == 0){//if entered FILE
       char* name = new char[40];
+      cout << "Enter File Name: " << endl;
       cin.getline(name, 40, '\n');//name of file must include ".txt"
       ifstream fileStream (name);
       if (fileStream.is_open()){//open file
@@ -64,9 +64,6 @@ int main(){
   cout << endl << endl;
   cout << "Heap Sort: " << endl;
   sortByRemovingRoot(numberInput, size);
-  for (int i = 0; i < size; i++){
-    cout << numberInput[i] << " ";
-  }
   delete[] numberInput;
   delete[] input;
   return 0;
@@ -105,22 +102,19 @@ int pow(int a, int b){//pow(10, 4) = 10^4, power function
 }
 
 //https://www.geeksforgeeks.org/building-heap-from-array/, harsh agarwal
-void heapify(int* &arr, int size, int index){//check to see if parents are greater than their children. If not, swap them.
-  int largest = index; //Would want to make root the largest
-  int leftChild = 2*index+1;
-  int rightChild = 2*index+2;
-
-  if (leftChild < size && arr[largest] < arr[leftChild]){//if left child exists within the tree and if root is smaller than it's left child
-    largest = leftChild;//go to child index
+void heapify(int* &arr, int size, int index){//check to see if parents are greater than their children. If not, swap them. Go down the tree
+  int temp = index; //Would want to make root the largest
+  if (index*2+1 < size && arr[temp] < arr[index*2+1]){//if left child exists within the tree and if root is smaller than it's left child
+    temp = index*2+1;//go to left child index
   }
-  if (rightChild < size && arr[largest] < arr[rightChild]){//check for right child after left
-    largest = rightChild;
+  if (index*2+2 < size && arr[temp] < arr[index*2+2]){//check for right child after left
+    temp = index*2+2;
   }
-  if (largest != index){//if the root was changed
-    int temp = arr[largest];
-    arr[largest] = arr[index];
-    arr[index] = temp;
-    heapify (arr, size, largest); //go through every parent-child relationship
+  if (temp != index){//if the root was changed, swap and heapify
+    int temp0 = arr[temp];
+    arr[temp] = arr[index];
+    arr[index] = temp0;
+    heapify (arr, size, temp); //go through every parent-child relationship
   }
 }
 
@@ -149,7 +143,7 @@ void heapify(int* &arr, int size, int index){//check to see if parents are great
 }
 */
 /*
-void heapVisual(int* arr, int size){
+void heapVisual(int* arr, int size){//Prints tree correctly, but kinda ugly
   int place = 0;
   int counter = 1;
   for (int i = 0; i < size; i++){
@@ -162,24 +156,29 @@ void heapVisual(int* arr, int size){
   }
 }
 */
-void heapVisual(int* arr, int size, int depth, int ind) {
-  if (size >= ind*2+2){
-    heapVisual(arr, size, depth+1, ind*2+2);
+void heapVisual(int* arr, int size, int depth, int index) {//help from Peter Jin to print tree sideways. Depth counts tabs. Starts at first element, 0 depth. Prints in a right-left-right left zigzag pattern
+  if (index*2+2 <= size){//get the rightmost index, incrementing depth each time
+    heapVisual(arr, size, depth+1, index*2+2);
   }
-  for (int i = 0; i < depth; i++){
+  for (int i = 0; i < depth; i++){//prints tabs depending on depth 
     cout << "\t";
   }
-  cout << arr[ind] << endl;
-  if (size >= ind*2+1) {
-    heapVisual(arr, size, depth+1, ind*2+1);
+  if (index != size){//fixes print as last element of tree
+    cout << arr[index] << endl;
+  }
+  if (index == size){//substitute spaces instead of the element
+    cout << "  " << endl;
+  }
+  if (index*2+1 <= size) {//go to left child, increment depth
+    heapVisual(arr, size, depth+1, index*2+1);
   }
 }
 
-void sortByRemovingRoot(int* &arr, int &size){
-  for (int i = 0; i < size; size--){
-    cout << arr[0] << ",";
-    arr[0] = arr[size-1];
-    heapify(arr, size, 0);
-    arr[size-1] = 0;
+void sortByRemovingRoot(int* &arr, int &size){//removes root and heapifies, repeats
+  for (int i = 0; i < size; size--){//decrease size with each iteration
+    cout << arr[0] << ",";//print the root
+    arr[0] = arr[size-1];//replace last element with root
+    heapify(arr, size, 0);//check if new tree meets criteria. If not, swap
+    arr[size-1] = 0;//set last element to "NULL"
   }
 }
