@@ -23,7 +23,7 @@ int main(){
       cin.getline(input, 200, '\n');
       loop = false;//continue
     }
-    else if (strcmp(keyword, "FILE") == 0){//if entered FILE
+    else if (strcmp(keyword, "FILE") == 0){//if entered FILE (within this else if statement, referenced code from Peter Jin code)
       char* name = new char[40];
       cout << "Enter File Name: " << endl;
       cin.getline(name, 40, '\n');//name of file must include ".txt"
